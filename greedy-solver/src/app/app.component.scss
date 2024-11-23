@@ -1,0 +1,22 @@
+.pageContiner {
+    padding: 10px;
+
+    .examples-wrapper{
+      margin: 20px 0;
+      .examples{
+
+        border: 1px solid blue;
+        border-radius: 10px;
+      }
+    }
+
+    .result-wrapper{
+      border: 1px solid blue;
+      border-radius: 10px;
+    }
+
+    .step-card {
+      max-width: 400px;
+    }
+}
+  

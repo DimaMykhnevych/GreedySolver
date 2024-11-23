@@ -1,0 +1,99 @@
+<div class="pageContiner">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-4 text-center">
+        <div>
+          Rows
+          <button color="primary" mat-icon-button (click)="deleteRow()">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button color="primary" mat-icon-button (click)="addRow()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="col-lg-4 text-center">
+        <div>
+          Columns
+          <button color="primary" mat-icon-button (click)="deleteColumn()">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button color="primary" mat-icon-button (click)="addColumn()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br />
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef=" ">
+      <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+      <mat-cell *matCellDef="let row; let rIndex = index">
+        {{
+          rIndex === dataSource.data.length - 1
+            ? "Currency Rate"
+            : rIndex === dataSource.data.length - 2
+            ? "Percentage Rate"
+            : rIndex === dataSource.data.length - 3
+            ? "Max"
+            : rIndex === dataSource.data.length - 4
+            ? "Min"
+            : rIndex + 1
+        }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container
+      *ngFor="
+        let header of displayedColumns | slice : 1 : displayedColumns.length;
+        index as cindex
+      "
+      [cdkColumnDef]="header"
+    >
+      <mat-header-cell *matHeaderCellDef>
+        <a class="header-value">
+          {{ cindex === displayedColumns.length - 2 ? "Amount" : header }}
+        </a>
+      </mat-header-cell>
+
+      <!-- when switch function is called then the value of editpointer and trucker will change accordingly
+          ngClass will change the color of the background of the edited cell-->
+      <mat-cell
+        *cdkCellDef="let element; index as rindex"
+        (click)="switchToInput(rindex, cindex)"
+        [ngClass]="{
+          activeCell:
+            editor.editPointer.col === cindex &&
+            editor.editPointer.row === rindex
+        }"
+      >
+        <!-- input and ngIf direacter to switch between to editing mode 
+               if editpointer col and row equal to cindex and rindex than switch to input-->
+        <a
+          *ngIf="
+            editor.editPointer.col != cindex || editor.editPointer.row != rindex
+          "
+          class="cell-value"
+        >
+          {{ element[cindex] }}
+        </a>
+        <input
+          type="number"
+          matInput
+          *ngIf="
+            editor.editPointer.col === cindex &&
+            editor.editPointer.row === rindex
+          "
+          [(ngModel)]="element[cindex]"
+          #value="ngModel"
+          name="value"
+        />
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+</div>
